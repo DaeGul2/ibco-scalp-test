@@ -135,6 +135,12 @@ const ResultPage = () => {
               <p className="text-muted text-center">추천할 제품이 없습니다.</p>
             )}
           </Row>
+
+          {/* 🔥 주의사항 추가 */}
+          <Alert variant="secondary" className="mt-4 text-center">
+            ⚠️ 본 자가진단 프로그램은 부정확할 수 있습니다.  
+            실제 자세한 진단은 반드시 전문 의료인을 찾아가시거나 병원에서 받으시기 바랍니다.
+          </Alert>
         </>
       )}
     </Container>
