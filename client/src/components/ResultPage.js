@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import { Container, Row, Col, Card, Image, ListGroup, Alert } from "react-bootstrap";
+import { Container, Row, Col, Card, Image, ListGroup, Alert, ProgressBar } from "react-bootstrap";
 import "./BoundingBox.css"; // YOLO 박스 스타일 추가
 
 // 🔥 추천 제품 URL & 썸네일 매핑
@@ -23,6 +23,13 @@ const productInfo = {
   }
 };
 
+// 🔥 점수에 따라 색상 변경
+const getScoreVariant = (score) => {
+  if (score >= 80) return "success"; // 건강한 상태 (초록)
+  if (score >= 50) return "warning"; // 보통 (주황)
+  return "danger"; // 문제 있음 (빨강)
+};
+
 const ResultPage = () => {
   const { state } = useLocation();
   console.log("📷 결과 페이지에서 받은 데이터:", state);
@@ -33,7 +40,7 @@ const ResultPage = () => {
 
   return (
     <Container className="mt-5">
-      <h2 className="text-center">🩺 진단 결과</h2>
+      <h2 className="text-center">🩺 두피 진단 결과</h2>
 
       {/* 🔥 진단 불가 시 메시지 출력 */}
       {state.result === 0 ? (
@@ -62,7 +69,7 @@ const ResultPage = () => {
               </div>
             </Col>
 
-            {/* 🔥 우측: AI 분석 결과 */}
+            {/* 🔥 우측: AI 분석 결과 + 점수 */}
             <Col md={6}>
               <Card className="p-3 mb-3 text-start">
                 <h5>🔍 AI 분석 결과</h5>
@@ -72,6 +79,29 @@ const ResultPage = () => {
               <Card className="p-3 text-start">
                 <h5>📖 분석 근거</h5>
                 <p>{state.analysis_reason}</p>
+              </Card>
+
+              {/* 🔥 평가 항목 점수 */}
+              <Card className="p-3 mt-3 text-start">
+                <h5>📊 두피 평가 점수 (0~100)</h5>
+                <ListGroup>
+                  <ListGroup.Item>
+                    <b>유분 상태:</b> {state.scores.sebum}점
+                    <ProgressBar variant={getScoreVariant(state.scores.sebum)} now={state.scores.sebum} />
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <b>각질 상태:</b> {state.scores.flaking}점
+                    <ProgressBar variant={getScoreVariant(state.scores.flaking)} now={state.scores.flaking} />
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <b>두피 수분 상태:</b> {state.scores.moisture}점
+                    <ProgressBar variant={getScoreVariant(state.scores.moisture)} now={state.scores.moisture} />
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <b>두피 염증 여부:</b> {state.scores.inflammation}점
+                    <ProgressBar variant={getScoreVariant(state.scores.inflammation)} now={state.scores.inflammation} />
+                  </ListGroup.Item>
+                </ListGroup>
               </Card>
             </Col>
           </Row>
